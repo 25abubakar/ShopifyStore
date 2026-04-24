@@ -10,6 +10,32 @@ public static class DbSchemaUpdater
 
     public static void EnsureCompatibilityColumns(AppDbContext db)
     {
+        if (TableExists(db, "Products"))
+        {
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Department') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Department nvarchar(80) NOT NULL CONSTRAINT DF_Products_Department DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Subcategory') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Subcategory nvarchar(120) NOT NULL CONSTRAINT DF_Products_Subcategory DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                UPDATE dbo.Products
+                SET Department = CASE WHEN LTRIM(RTRIM(Department)) = '' THEN Category ELSE Department END,
+                    Subcategory = CASE WHEN LTRIM(RTRIM(Subcategory)) = '' THEN Name ELSE Subcategory END;
+                """);
+        }
+
         if (!TableExists(db, "Orders"))
         {
             return;
@@ -44,6 +70,14 @@ public static class DbSchemaUpdater
             IF COL_LENGTH('dbo.Orders', 'PaymentStatus') IS NULL
             BEGIN
                 ALTER TABLE dbo.Orders ADD PaymentStatus int NOT NULL CONSTRAINT DF_Orders_PaymentStatus DEFAULT(1);
+            END
+            """);
+
+        db.Database.ExecuteSqlRaw(
+            """
+            IF COL_LENGTH('dbo.Orders', 'PaymentReference') IS NULL
+            BEGIN
+                ALTER TABLE dbo.Orders ADD PaymentReference nvarchar(80) NOT NULL CONSTRAINT DF_Orders_PaymentReference DEFAULT('');
             END
             """);
     }

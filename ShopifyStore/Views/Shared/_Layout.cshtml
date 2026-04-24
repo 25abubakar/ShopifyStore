@@ -20,17 +20,17 @@
                 </button>
                 <div class="collapse navbar-collapse" id="topNav">
                     <ul class="navbar-nav nav-main mx-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Women">WOMEN</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Men">MEN</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Kids">KIDS</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">ACCESSORIES</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-department="Women">WOMEN</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-department="Men">MEN</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-department="Kids">KIDS</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-department="Accessories">ACCESSORIES</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">PRODUCTS</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Women">Women Products</a></li>
-                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Men">Men Products</a></li>
-                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Kids">Kids Products</a></li>
-                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">Accessories Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-department="Women">Women Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-department="Men">Men Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-department="Kids">Kids Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-department="Accessories">Accessories Products</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -56,7 +56,18 @@
                                 <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="Employee">Employee Dashboard</a></li>
                                 <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
                             }
-                            <li class="nav-item"><a class="btn btn-sm btn-dark ms-lg-2" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="ms-lg-2">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-dark">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-outline-dark ms-lg-2" asp-controller="Account" asp-action="Login">Staff Login</a>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -80,10 +91,10 @@
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Shop</h6>
-                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Women">Women</a>
-                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Men">Men</a>
-                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Kids">Kids</a>
-                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">Accessories</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-department="Women">Women</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-department="Men">Men</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-department="Kids">Kids</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-department="Accessories">Accessories</a>
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Company</h6>

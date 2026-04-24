@@ -15,13 +15,22 @@ public class ProductsController(AppDbContext db) : Controller
     }
 
     [Authorize(Roles = "CEO,Admin")]
-    public IActionResult Create() => View(new Product());
+    public IActionResult Create()
+    {
+        PopulateTaxonomy();
+        return View(new Product());
+    }
 
     [HttpPost]
     [Authorize(Roles = "CEO,Admin")]
     public async Task<IActionResult> Create(Product product)
     {
-        if (!ModelState.IsValid) return View(product);
+        ValidateTaxonomy(product);
+        if (!ModelState.IsValid)
+        {
+            PopulateTaxonomy();
+            return View(product);
+        }
         db.Products.Add(product);
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
@@ -32,6 +41,7 @@ public class ProductsController(AppDbContext db) : Controller
     {
         var product = await db.Products.FindAsync(id);
         if (product is null) return NotFound();
+        PopulateTaxonomy();
         return View(product);
     }
 
@@ -39,7 +49,12 @@ public class ProductsController(AppDbContext db) : Controller
     [Authorize(Roles = "CEO,Admin")]
     public async Task<IActionResult> Edit(Product product)
     {
-        if (!ModelState.IsValid) return View(product);
+        ValidateTaxonomy(product);
+        if (!ModelState.IsValid)
+        {
+            PopulateTaxonomy();
+            return View(product);
+        }
         db.Products.Update(product);
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
@@ -62,5 +77,18 @@ public class ProductsController(AppDbContext db) : Controller
         db.Products.Remove(product);
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private void ValidateTaxonomy(Product product)
+    {
+        if (!CatalogTaxonomy.IsValid(product.Department, product.Category, product.Subcategory))
+        {
+            ModelState.AddModelError(string.Empty, "Invalid department/category/subcategory combination.");
+        }
+    }
+
+    private void PopulateTaxonomy()
+    {
+        ViewBag.Taxonomy = CatalogTaxonomy.Tree;
     }
 }

@@ -7,17 +7,79 @@ namespace ShopifyStore.Controllers;
 
 public class StoreController(AppDbContext db) : Controller
 {
-    public async Task<IActionResult> Index(string? category)
+    public async Task<IActionResult> Index(
+        string? department,
+        string? category,
+        string? subcategory,
+        string? search,
+        decimal? minPrice,
+        decimal? maxPrice,
+        bool inStockOnly = false,
+        string sortBy = "name")
     {
         var query = db.Products.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(department))
+        {
+            query = query.Where(x => x.Department.ToLower() == department.ToLower());
+        }
+
         if (!string.IsNullOrWhiteSpace(category))
         {
             query = query.Where(x => x.Category.ToLower() == category.ToLower());
         }
 
-        ViewBag.Categories = await db.Products.Select(x => x.Category).Distinct().OrderBy(x => x).ToListAsync();
-        ViewBag.ActiveCategory = category;
-        return View(await query.OrderBy(x => x.Name).ToListAsync());
+        if (!string.IsNullOrWhiteSpace(subcategory))
+        {
+            query = query.Where(x => x.Subcategory.ToLower() == subcategory.ToLower());
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var normalized = search.Trim().ToLower();
+            query = query.Where(x => x.Name.ToLower().Contains(normalized) || x.Description.ToLower().Contains(normalized));
+        }
+
+        if (minPrice.HasValue)
+        {
+            query = query.Where(x => x.PricePkr >= minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(x => x.PricePkr <= maxPrice.Value);
+        }
+
+        if (inStockOnly)
+        {
+            query = query.Where(x => x.Stock > 0);
+        }
+
+        query = sortBy?.ToLower() switch
+        {
+            "price_asc" => query.OrderBy(x => x.PricePkr),
+            "price_desc" => query.OrderByDescending(x => x.PricePkr),
+            "newest" => query.OrderByDescending(x => x.Id),
+            _ => query.OrderBy(x => x.Name)
+        };
+
+        var model = new StoreIndexViewModel
+        {
+            Products = await query.ToListAsync(),
+            Departments = await db.Products.Select(x => x.Department).Where(x => x != "").Distinct().OrderBy(x => x).ToListAsync(),
+            Categories = await db.Products.Select(x => x.Category).Where(x => x != "").Distinct().OrderBy(x => x).ToListAsync(),
+            Subcategories = await db.Products.Select(x => x.Subcategory).Where(x => x != "").Distinct().OrderBy(x => x).ToListAsync(),
+            Department = department ?? string.Empty,
+            Category = category ?? string.Empty,
+            Subcategory = subcategory ?? string.Empty,
+            Search = search ?? string.Empty,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice,
+            InStockOnly = inStockOnly,
+            SortBy = sortBy
+        };
+
+        return View(model);
     }
 
     public async Task<IActionResult> Product(int id)
@@ -44,16 +106,16 @@ public class StoreController(AppDbContext db) : Controller
         var product = await db.Products.FindAsync(model.ProductId);
         if (product is null) return NotFound();
 
-        if (model.PaymentMethod == PaymentMethod.BankTransfer)
+        if (model.PaymentMethod is PaymentMethod.BankTransfer or PaymentMethod.EasypaisaOrJazzCash)
         {
-            if (string.IsNullOrWhiteSpace(model.BankTransactionId))
+            if (string.IsNullOrWhiteSpace(model.PaymentReference))
             {
-                ModelState.AddModelError(nameof(model.BankTransactionId), "Bank transaction ID is required for bank transfer.");
+                ModelState.AddModelError(nameof(model.PaymentReference), "Payment reference is required for manual transfer methods.");
             }
 
             if (string.IsNullOrWhiteSpace(model.PaymentScreenshotUrl))
             {
-                ModelState.AddModelError(nameof(model.PaymentScreenshotUrl), "Payment screenshot URL is required for bank transfer.");
+                ModelState.AddModelError(nameof(model.PaymentScreenshotUrl), "Payment screenshot URL is required for manual transfer methods.");
             }
         }
 
@@ -71,17 +133,23 @@ public class StoreController(AppDbContext db) : Controller
         }
 
         var total = product.PricePkr * model.Quantity;
-        var isBankTransfer = model.PaymentMethod == PaymentMethod.BankTransfer;
+        var isManualTransfer = model.PaymentMethod is PaymentMethod.BankTransfer or PaymentMethod.EasypaisaOrJazzCash;
+        var isGateway = model.PaymentMethod == PaymentMethod.OnlineGateway;
         var order = new Order
         {
             CustomerName = model.CustomerName,
             Phone = model.Phone,
             Address = model.Address,
             PaymentMethod = model.PaymentMethod,
-            BankTransactionId = isBankTransfer ? model.BankTransactionId : string.Empty,
-            PaymentScreenshotUrl = isBankTransfer ? model.PaymentScreenshotUrl : string.Empty,
-            PaymentStatus = isBankTransfer ? PaymentStatus.VerificationPending : PaymentStatus.Unpaid,
-            OrderStatus = isBankTransfer ? OrderStatus.PaymentUnderReview : OrderStatus.Pending,
+            BankTransactionId = isManualTransfer ? model.PaymentReference : string.Empty,
+            PaymentScreenshotUrl = isManualTransfer ? model.PaymentScreenshotUrl : string.Empty,
+            PaymentReference = model.PaymentReference,
+            PaymentStatus = isManualTransfer
+                ? PaymentStatus.VerificationPending
+                : isGateway
+                    ? PaymentStatus.GatewayPending
+                    : PaymentStatus.Unpaid,
+            OrderStatus = isManualTransfer ? OrderStatus.PaymentUnderReview : OrderStatus.Pending,
             TotalAmountPkr = total,
             Items =
             [

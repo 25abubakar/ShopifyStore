@@ -11,7 +11,15 @@ namespace ShopifyStore.Controllers;
 public class AccountController(AppDbContext db) : Controller
 {
     [HttpGet]
-    public IActionResult Login() => View(new LoginViewModel());
+    public IActionResult Login()
+    {
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            return RedirectToAction("Index", "Store");
+        }
+
+        return View(new LoginViewModel());
+    }
 
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
@@ -45,10 +53,12 @@ public class AccountController(AppDbContext db) : Controller
         };
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction("Index", "Store");
     }
 
     public IActionResult AccessDenied() => View();

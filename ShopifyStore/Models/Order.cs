@@ -5,7 +5,9 @@ namespace ShopifyStore.Models;
 public enum PaymentMethod
 {
     CashOnDelivery = 1,
-    BankTransfer = 2
+    BankTransfer = 2,
+    EasypaisaOrJazzCash = 3,
+    OnlineGateway = 4
 }
 
 public enum OrderStatus
@@ -23,7 +25,9 @@ public enum PaymentStatus
     Unpaid = 1,
     Paid = 2,
     VerificationPending = 3,
-    Rejected = 4
+    Rejected = 4,
+    GatewayPending = 5,
+    GatewayFailed = 6
 }
 
 public class Order
@@ -47,6 +51,9 @@ public class Order
 
     [StringLength(200)]
     public string PaymentScreenshotUrl { get; set; } = string.Empty;
+
+    [StringLength(80)]
+    public string PaymentReference { get; set; } = string.Empty;
 
     public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;

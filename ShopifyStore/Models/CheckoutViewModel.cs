@@ -27,4 +27,7 @@ public class CheckoutViewModel
 
     [StringLength(200)]
     public string PaymentScreenshotUrl { get; set; } = string.Empty;
+
+    [StringLength(80)]
+    public string PaymentReference { get; set; } = string.Empty;
 }

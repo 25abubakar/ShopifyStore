@@ -4,6 +4,8 @@ namespace ShopifyStore.Models;
 
 public class Product
 {
+    public static readonly string[] Departments = ["Men", "Women", "Kids", "Accessories"];
+
     public int Id { get; set; }
 
     [Required, StringLength(150)]
@@ -20,6 +22,12 @@ public class Product
 
     [Required, StringLength(120)]
     public string Category { get; set; } = string.Empty;
+
+    [Required, StringLength(80)]
+    public string Department { get; set; } = string.Empty;
+
+    [Required, StringLength(120)]
+    public string Subcategory { get; set; } = string.Empty;
 
     [StringLength(300)]
     public string ImageUrl { get; set; } = string.Empty;
