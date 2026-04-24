@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopifyStore.Data;
@@ -11,6 +12,7 @@ namespace ShopifyStore.Controllers;
 public class AccountController(AppDbContext db) : Controller
 {
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
         if (User.Identity?.IsAuthenticated == true)
@@ -22,6 +24,7 @@ public class AccountController(AppDbContext db) : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -54,6 +57,7 @@ public class AccountController(AppDbContext db) : Controller
     }
 
     [HttpPost]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
@@ -61,5 +65,6 @@ public class AccountController(AppDbContext db) : Controller
         return RedirectToAction("Index", "Store");
     }
 
+    [AllowAnonymous]
     public IActionResult AccessDenied() => View();
 }

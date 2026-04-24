@@ -24,6 +24,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .Property(x => x.Subcategory)
             .HasMaxLength(120);
 
+        modelBuilder.Entity<Product>()
+            .Property(x => x.Sku)
+            .HasMaxLength(60);
+
         modelBuilder.Entity<ProductTaxonomyEntry>()
             .HasIndex(x => new { x.Department, x.Category, x.Subcategory })
             .IsUnique();

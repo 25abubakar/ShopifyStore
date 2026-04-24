@@ -37,7 +37,11 @@ public class StoreController(AppDbContext db) : Controller
         if (!string.IsNullOrWhiteSpace(search))
         {
             var normalized = search.Trim().ToLower();
-            query = query.Where(x => x.Name.ToLower().Contains(normalized) || x.Description.ToLower().Contains(normalized));
+            query = query.Where(x =>
+                x.Name.ToLower().Contains(normalized)
+                || x.Description.ToLower().Contains(normalized)
+                || x.Brand.ToLower().Contains(normalized)
+                || x.Sku.ToLower().Contains(normalized));
         }
 
         if (minPrice.HasValue)
@@ -54,6 +58,8 @@ public class StoreController(AppDbContext db) : Controller
         {
             query = query.Where(x => x.Stock > 0);
         }
+
+        query = query.Where(x => x.IsActive);
 
         query = sortBy?.ToLower() switch
         {
@@ -77,6 +83,17 @@ public class StoreController(AppDbContext db) : Controller
             MaxPrice = maxPrice,
             InStockOnly = inStockOnly,
             SortBy = sortBy
+        };
+
+        var activeDepartment = department?.Trim() ?? string.Empty;
+        (model.HeroTitle, model.HeroSubtitle, model.HeroImageUrl) = activeDepartment.ToLowerInvariant() switch
+        {
+            "men" => ("Men's New Collection", "Premium men styles, footwear and essentials.", "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=2000&q=80"),
+            "women" => ("Women's Latest Arrivals", "Elegant women wear and fashion picks.", "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2000&q=80"),
+            "kids" => ("Kids Collection", "Comfortable and colorful styles for kids.", "https://images.unsplash.com/photo-1519238359922-989348752efb?auto=format&fit=crop&w=2000&q=80"),
+            "accessories" => ("Accessories Picks", "Bags, belts and watches for every look.", "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=2000&q=80"),
+            "beauty" => ("Beauty Essentials", "Skincare, makeup and personal care products.", "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=2000&q=80"),
+            _ => ("New Sustainable Knits & Styles", "Premium quality fashion for Pakistan with COD, transfer and digital wallet checkout options.", "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2000&q=80")
         };
 
         return View(model);

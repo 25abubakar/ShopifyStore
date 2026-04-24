@@ -11,7 +11,32 @@ public class ProductsController(AppDbContext db) : Controller
 {
     public async Task<IActionResult> Index()
     {
-        return View(await db.Products.OrderBy(x => x.Name).ToListAsync());
+        var rows = await db.Products
+            .OrderBy(x => x.Name)
+            .Select(product => new ProductAdminRowViewModel
+            {
+                ProductId = product.Id,
+                Name = product.Name,
+                Department = product.Department,
+                Category = product.Category,
+                Subcategory = product.Subcategory,
+                Sku = product.Sku,
+                Brand = product.Brand,
+                PricePkr = product.PricePkr,
+                Stock = product.Stock,
+                QtySold = db.OrderItems
+                    .Where(item => item.ProductId == product.Id && item.Order != null && item.Order.OrderStatus == OrderStatus.Delivered)
+                    .Sum(item => (int?)item.Quantity) ?? 0,
+                QtyHeld = db.OrderItems
+                    .Where(item => item.ProductId == product.Id
+                        && item.Order != null
+                        && item.Order.OrderStatus != OrderStatus.Delivered
+                        && item.Order.OrderStatus != OrderStatus.Cancelled)
+                    .Sum(item => (int?)item.Quantity) ?? 0
+            })
+            .ToListAsync();
+
+        return View(rows);
     }
 
     [Authorize(Roles = "CEO,Admin")]

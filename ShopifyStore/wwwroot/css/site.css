@@ -244,6 +244,16 @@ body {
   margin-bottom: 0;
 }
 
+.products-grid-table th,
+.products-grid-table td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.products-grid-table td:first-child {
+  min-width: 200px;
+}
+
 @media (max-width: 991px) {
   .nav-main .nav-link {
     margin: 2px 0;

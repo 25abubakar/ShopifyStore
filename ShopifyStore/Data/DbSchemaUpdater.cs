@@ -30,9 +30,92 @@ public static class DbSchemaUpdater
 
             db.Database.ExecuteSqlRaw(
                 """
+                IF COL_LENGTH('dbo.Products', 'Sku') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Sku nvarchar(60) NOT NULL CONSTRAINT DF_Products_Sku DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Brand') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Brand nvarchar(80) NOT NULL CONSTRAINT DF_Products_Brand DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Color') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Color nvarchar(40) NOT NULL CONSTRAINT DF_Products_Color DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Size') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Size nvarchar(30) NOT NULL CONSTRAINT DF_Products_Size DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'Material') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD Material nvarchar(80) NOT NULL CONSTRAINT DF_Products_Material DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'CountryOfOrigin') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD CountryOfOrigin nvarchar(80) NOT NULL CONSTRAINT DF_Products_CountryOfOrigin DEFAULT('Pakistan');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'CareInstructions') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD CareInstructions nvarchar(500) NOT NULL CONSTRAINT DF_Products_CareInstructions DEFAULT('');
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'DiscountPercent') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD DiscountPercent decimal(18,2) NOT NULL CONSTRAINT DF_Products_DiscountPercent DEFAULT(0);
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'IsActive') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD IsActive bit NOT NULL CONSTRAINT DF_Products_IsActive DEFAULT(1);
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
+                IF COL_LENGTH('dbo.Products', 'IsFeatured') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Products ADD IsFeatured bit NOT NULL CONSTRAINT DF_Products_IsFeatured DEFAULT(0);
+                END
+                """);
+
+            db.Database.ExecuteSqlRaw(
+                """
                 UPDATE dbo.Products
                 SET Department = CASE WHEN LTRIM(RTRIM(Department)) = '' THEN Category ELSE Department END,
-                    Subcategory = CASE WHEN LTRIM(RTRIM(Subcategory)) = '' THEN Name ELSE Subcategory END;
+                    Subcategory = CASE WHEN LTRIM(RTRIM(Subcategory)) = '' THEN Name ELSE Subcategory END,
+                    Sku = CASE WHEN LTRIM(RTRIM(Sku)) = '' THEN CONCAT('SKU-', RIGHT(CONCAT('00000', CAST(Id AS varchar(10))), 5)) ELSE Sku END,
+                    Brand = CASE WHEN LTRIM(RTRIM(Brand)) = '' THEN 'Inshab Co.' ELSE Brand END,
+                    CountryOfOrigin = CASE WHEN LTRIM(RTRIM(CountryOfOrigin)) = '' THEN 'Pakistan' ELSE CountryOfOrigin END;
                 """);
         }
 

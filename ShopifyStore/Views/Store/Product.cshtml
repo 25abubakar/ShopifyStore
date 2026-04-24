@@ -11,9 +11,22 @@
     <div class="col-12 col-md-7">
         <h2>@Model.Name</h2>
         <p class="text-muted">@Model.Department / @Model.Category / @Model.Subcategory</p>
+        <p class="mb-1"><strong>Brand:</strong> @Model.Brand</p>
+        <p class="mb-1"><strong>SKU:</strong> @Model.Sku</p>
+        <p class="mb-1"><strong>Color:</strong> @Model.Color | <strong>Size:</strong> @Model.Size</p>
+        <p class="mb-1"><strong>Material:</strong> @Model.Material</p>
+        <p class="mb-1"><strong>Origin:</strong> @Model.CountryOfOrigin</p>
         <p>@Model.Description</p>
         <h4>PKR @Model.PricePkr</h4>
+        @if (Model.DiscountPercent > 0)
+        {
+            <p class="text-success mb-1"><strong>Discount:</strong> @Model.DiscountPercent%</p>
+        }
         <p>Available: @Model.Stock</p>
+        @if (!string.IsNullOrWhiteSpace(Model.CareInstructions))
+        {
+            <p class="small text-muted"><strong>Care:</strong> @Model.CareInstructions</p>
+        }
         <a class="btn btn-success w-100 w-md-auto" asp-action="Checkout" asp-route-productId="@Model.Id">Buy Now</a>
     </div>
 </div>

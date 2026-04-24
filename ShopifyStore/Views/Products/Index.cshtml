@@ -1,4 +1,4 @@
-@model IEnumerable<Product>
+@model IEnumerable<ProductAdminRowViewModel>
 @{
     ViewData["Title"] = "Manage Products";
 }
@@ -13,15 +13,20 @@
 </div>
 
 <div class="table-responsive">
-<table class="table table-striped align-middle">
+<table class="table table-striped align-middle products-grid-table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Department</th>
             <th>Category</th>
             <th>Subcategory</th>
+            <th>Brand</th>
+            <th>SKU</th>
             <th>Price</th>
             <th>Stock</th>
+            <th>Qty Sold</th>
+            <th>Qty Held</th>
+            <th>Qty Available</th>
             <th></th>
         </tr>
     </thead>
@@ -33,16 +38,21 @@
             <td>@p.Department</td>
             <td>@p.Category</td>
             <td>@p.Subcategory</td>
+            <td>@p.Brand</td>
+            <td>@p.Sku</td>
             <td>@p.PricePkr</td>
             <td>@p.Stock</td>
+            <td>@p.QtySold</td>
+            <td>@p.QtyHeld</td>
+            <td>@p.QtyAvailable</td>
             <td>
                 @if (User.IsInRole("CEO") || User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@p.Id">Edit</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@p.ProductId">Edit</a>
                 }
                 @if (User.IsInRole("CEO"))
                 {
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@p.Id">Delete</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@p.ProductId">Delete</a>
                 }
             </td>
         </tr>

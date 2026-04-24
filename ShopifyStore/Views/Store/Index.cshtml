@@ -3,14 +3,15 @@
     ViewData["Title"] = "Store";
 }
 
-<section class="hero-section">
+<section class="hero-section" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.5), rgba(0,0,0,0.15)), url('@Model.HeroImageUrl');">
     <div class="hero-overlay">
         <p class="hero-kicker">NEW ARRIVAL</p>
-        <h1>New Sustainable<br />Knits & Styles</h1>
-        <p class="hero-sub">Premium quality fashion for Pakistan with COD, transfer and digital wallet checkout options.</p>
+        <h1>@Model.HeroTitle</h1>
+        <p class="hero-sub">@Model.HeroSubtitle</p>
         <div class="hero-actions">
             <a class="btn btn-light hero-btn" asp-action="Index" asp-route-department="Women">SHOP WOMEN</a>
             <a class="btn btn-outline-light hero-btn" asp-action="Index" asp-route-department="Men">SHOP MEN</a>
+            <a class="btn btn-outline-light hero-btn" asp-action="Index" asp-route-department="Beauty">SHOP BEAUTY</a>
         </div>
     </div>
 </section>
@@ -100,7 +101,12 @@
                     <div class="product-body">
                         <div class="product-category">@product.Department / @product.Category / @product.Subcategory</div>
                         <h3 class="product-name">@product.Name</h3>
+                        <div class="small text-muted">@product.Brand | @product.Sku</div>
                         <div class="product-price">Rs. @product.PricePkr</div>
+                        @if (product.DiscountPercent > 0)
+                        {
+                            <div class="small text-success">Discount: @product.DiscountPercent%</div>
+                        }
                         <div class="product-stock">Stock: @product.Stock</div>
                         <a class="btn btn-dark w-100 mt-2" asp-action="Product" asp-route-id="@product.Id">View Product</a>
                     </div>
