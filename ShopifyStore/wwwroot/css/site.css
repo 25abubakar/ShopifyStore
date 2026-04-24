@@ -193,6 +193,10 @@ body {
   margin-top: 0;
   font-size: 14px;
   flex-shrink: 0;
+  position: relative !important;
+  bottom: auto !important;
+  width: 100% !important;
+  line-height: normal !important;
 }
 
 .footer-brand {
