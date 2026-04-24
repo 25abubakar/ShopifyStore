@@ -20,11 +20,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="topNav">
                     <ul class="navbar-nav nav-main mx-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index">WOMEN</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Women">WOMEN</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Men">MEN</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Kids">KIDS</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">ACCESSORIES</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index">NEW IN</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">PRODUCTS</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Women">Women Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Men">Men Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Kids">Kids Products</a></li>
+                                <li><a class="dropdown-item" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">Accessories Products</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <ul class="navbar-nav nav-actions align-items-lg-center">
                         @if (User.Identity?.IsAuthenticated == true)
@@ -32,59 +40,59 @@
                             @if (User.IsInRole("CEO"))
                             {
                                 <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="CEO">CEO Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Products" asp-action="Index">PRODUCTS</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Reviews" asp-action="Index">REVIEWS</a></li>
                             }
                             else if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="Admin">Admin Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Products" asp-action="Index">PRODUCTS</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Reviews" asp-action="Index">REVIEWS</a></li>
                             }
                             else
                             {
                                 <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="Employee">Employee Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
                             }
-                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
-                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Products" asp-action="Index">PRODUCTS</a></li>
-                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Reviews" asp-action="Index">REVIEWS</a></li>
                             <li class="nav-item"><a class="btn btn-sm btn-dark ms-lg-2" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                        }
-                        else
-                        {
-                            <li class="nav-item"><a class="btn btn-sm btn-outline-dark ms-lg-2" asp-controller="Account" asp-action="Login">Staff Login</a></li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container-fluid px-0">
+    <div class="page-content">
         <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <footer class="footer text-muted">
-        <div class="container py-5">
-            <div class="row g-4">
-                <div class="col-12 col-md-4">
+        <div class="container py-4">
+            <div class="row g-3">
+                <div class="col-12 col-md-3">
                     <strong class="footer-brand">PAKSTYLE</strong>
-                    <p class="mb-2 small">Professional Pakistan fashion ecommerce platform with secure payments and admin controls.</p>
+                    <p class="mb-2 small">Pakistan fashion ecommerce platform.</p>
                     <div class="small">Support: +92 300 0000000</div>
                     <div class="small">Email: support@pakstyle.pk</div>
                 </div>
                 <div class="col-6 col-md-3">
                     <h6>Shop</h6>
-                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index">Women</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Women">Women</a>
                     <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Men">Men</a>
                     <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Kids">Kids</a>
                     <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">Accessories</a>
                 </div>
-                <div class="col-6 col-md-2">
+                <div class="col-6 col-md-3">
                     <h6>Company</h6>
                     <a class="footer-link d-block external-link" href="https://nishatlinen.com/" target="_blank" rel="noopener noreferrer">Design Reference</a>
                     <a class="footer-link d-block external-link" href="https://learn.microsoft.com/aspnet/core/security/" target="_blank" rel="noopener noreferrer">Security Docs</a>
                 </div>
                 <div class="col-12 col-md-3">
                     <h6>Need Help?</h6>
-                    <p class="small mb-2">For returns, exchanges and order support contact our team.</p>
+                    <p class="small mb-2">Returns and order support available 24/7.</p>
                     <a class="btn btn-outline-dark btn-sm" asp-controller="Store" asp-action="Index">Continue Shopping</a>
                 </div>
             </div>

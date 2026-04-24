@@ -6,7 +6,7 @@ using ShopifyStore.Models;
 
 namespace ShopifyStore.Controllers;
 
-[Authorize(Roles = "CEO,Admin,Employee")]
+[Authorize(Roles = "CEO,Admin")]
 public class ProductsController(AppDbContext db) : Controller
 {
     public async Task<IActionResult> Index()

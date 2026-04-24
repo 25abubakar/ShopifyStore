@@ -33,11 +33,16 @@
                     @if (User.IsInRole("CEO") || User.IsInRole("Admin"))
                     {
                         <form asp-action="UpdateStatus" method="post" class="d-flex gap-1">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@o.Id" />
                             <select name="orderStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<OrderStatus>()"></select>
                             <select name="paymentStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
                             <button class="btn btn-sm btn-dark">Save</button>
                         </form>
+                    }
+                    else if (User.IsInRole("Employee"))
+                    {
+                        <span class="text-muted small">View only</span>
                     }
                 </td>
             </tr>

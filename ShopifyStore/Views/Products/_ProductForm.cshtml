@@ -8,7 +8,13 @@
     </div>
     <div class="mb-2">
         <label asp-for="Category" class="form-label"></label>
-        <input asp-for="Category" class="form-control" />
+        <select asp-for="Category" class="form-select">
+            <option value="">Select category</option>
+            <option value="Women">Women</option>
+            <option value="Men">Men</option>
+            <option value="Kids">Kids</option>
+            <option value="Accessories">Accessories</option>
+        </select>
     </div>
     <div class="mb-2">
         <label asp-for="Description" class="form-label"></label>

@@ -12,7 +12,7 @@ public class StoreController(AppDbContext db) : Controller
         var query = db.Products.AsQueryable();
         if (!string.IsNullOrWhiteSpace(category))
         {
-            query = query.Where(x => x.Category == category);
+            query = query.Where(x => x.Category.ToLower() == category.ToLower());
         }
 
         ViewBag.Categories = await db.Products.Select(x => x.Category).Distinct().OrderBy(x => x).ToListAsync();

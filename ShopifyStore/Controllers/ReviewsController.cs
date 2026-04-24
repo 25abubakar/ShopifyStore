@@ -21,7 +21,7 @@ public class ReviewsController(AppDbContext db) : Controller
         return RedirectToAction("Product", "Store", new { id = review.ProductId });
     }
 
-    [Authorize(Roles = "CEO,Admin,Employee")]
+    [Authorize(Roles = "CEO,Admin")]
     public async Task<IActionResult> Index()
     {
         var reviews = await db.Reviews.Include(x => x.Product).OrderByDescending(x => x.CreatedAt).ToListAsync();
