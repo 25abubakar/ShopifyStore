@@ -7,6 +7,7 @@
     <p>Are you sure you want to delete <strong>@Model.Name</strong>?</p>
 </div>
 <form method="post">
+    @Html.AntiForgeryToken()
     <button class="btn btn-danger">Delete</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

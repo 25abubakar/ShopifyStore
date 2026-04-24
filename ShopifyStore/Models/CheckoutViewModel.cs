@@ -21,4 +21,10 @@ public class CheckoutViewModel
 
     [Required]
     public PaymentMethod PaymentMethod { get; set; }
+
+    [StringLength(60)]
+    public string BankTransactionId { get; set; } = string.Empty;
+
+    [StringLength(200)]
+    public string PaymentScreenshotUrl { get; set; } = string.Empty;
 }

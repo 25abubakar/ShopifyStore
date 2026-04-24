@@ -1,0 +1,50 @@
+@model SalesDashboardViewModel
+@{
+    ViewData["Title"] = $"{Model.RoleName} Dashboard";
+}
+
+<div class="container py-4">
+    <h2>@Model.RoleName Dashboard</h2>
+    <p class="text-muted">Sales, inventory and order insights.</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-2"><div class="card card-body"><strong>@Model.TotalOrders</strong><span>Total Orders</span></div></div>
+        <div class="col-md-2"><div class="card card-body"><strong>Rs. @Model.TotalSalesPkr</strong><span>Total Sales</span></div></div>
+        <div class="col-md-2"><div class="card card-body"><strong>@Model.TotalProducts</strong><span>Total Products</span></div></div>
+        <div class="col-md-3"><div class="card card-body"><strong>@Model.AvailableProducts</strong><span>Available Products</span></div></div>
+        <div class="col-md-3"><div class="card card-body"><strong>@Model.SoldOutProducts</strong><span>Sold Out Products</span></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <h5>Top Selling Products</h5>
+            <table class="table table-sm">
+                <thead><tr><th>Product</th><th>Sold Qty</th></tr></thead>
+                <tbody>
+                    @foreach (var p in Model.TopProducts)
+                    {
+                        <tr><td>@p.ProductName</td><td>@p.SoldQty</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-7">
+            <h5>Recent Orders</h5>
+            <table class="table table-sm">
+                <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
+                <tbody>
+                    @foreach (var order in Model.RecentOrders)
+                    {
+                        <tr>
+                            <td>#@order.Id</td>
+                            <td>@order.CustomerName</td>
+                            <td>Rs. @order.TotalAmountPkr</td>
+                            <td>@order.PaymentMethod / @order.PaymentStatus</td>
+                            <td>@order.OrderStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

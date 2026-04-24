@@ -8,6 +8,24 @@ public enum PaymentMethod
     BankTransfer = 2
 }
 
+public enum OrderStatus
+{
+    Pending = 1,
+    PaymentUnderReview = 2,
+    Confirmed = 3,
+    Dispatched = 4,
+    Delivered = 5,
+    Cancelled = 6
+}
+
+public enum PaymentStatus
+{
+    Unpaid = 1,
+    Paid = 2,
+    VerificationPending = 3,
+    Rejected = 4
+}
+
 public class Order
 {
     public int Id { get; set; }
@@ -23,6 +41,15 @@ public class Order
 
     [Required]
     public PaymentMethod PaymentMethod { get; set; }
+
+    [StringLength(60)]
+    public string BankTransactionId { get; set; } = string.Empty;
+
+    [StringLength(200)]
+    public string PaymentScreenshotUrl { get; set; } = string.Empty;
+
+    public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
+    public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
 
     public decimal TotalAmountPkr { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

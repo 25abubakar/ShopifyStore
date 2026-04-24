@@ -10,6 +10,7 @@
                 <h3 class="mb-3">Staff Login</h3>
                 <p class="text-muted">Use seeded users: ceo/ceo123, admin/admin123, employee/emp123</p>
                 <form method="post">
+                    @Html.AntiForgeryToken()
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="mb-3">
                         <label asp-for="Username" class="form-label"></label>

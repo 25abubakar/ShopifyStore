@@ -44,6 +44,19 @@ public class StoreController(AppDbContext db) : Controller
         var product = await db.Products.FindAsync(model.ProductId);
         if (product is null) return NotFound();
 
+        if (model.PaymentMethod == PaymentMethod.BankTransfer)
+        {
+            if (string.IsNullOrWhiteSpace(model.BankTransactionId))
+            {
+                ModelState.AddModelError(nameof(model.BankTransactionId), "Bank transaction ID is required for bank transfer.");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.PaymentScreenshotUrl))
+            {
+                ModelState.AddModelError(nameof(model.PaymentScreenshotUrl), "Payment screenshot URL is required for bank transfer.");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.Product = product;
@@ -58,12 +71,17 @@ public class StoreController(AppDbContext db) : Controller
         }
 
         var total = product.PricePkr * model.Quantity;
+        var isBankTransfer = model.PaymentMethod == PaymentMethod.BankTransfer;
         var order = new Order
         {
             CustomerName = model.CustomerName,
             Phone = model.Phone,
             Address = model.Address,
             PaymentMethod = model.PaymentMethod,
+            BankTransactionId = isBankTransfer ? model.BankTransactionId : string.Empty,
+            PaymentScreenshotUrl = isBankTransfer ? model.PaymentScreenshotUrl : string.Empty,
+            PaymentStatus = isBankTransfer ? PaymentStatus.VerificationPending : PaymentStatus.Unpaid,
+            OrderStatus = isBankTransfer ? OrderStatus.PaymentUnderReview : OrderStatus.Pending,
             TotalAmountPkr = total,
             Items =
             [

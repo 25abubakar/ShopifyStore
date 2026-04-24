@@ -10,51 +10,95 @@
     <link rel="stylesheet" href="~/ShopifyStore.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom mb-4">
+    <header class="site-header">
+        <div class="top-strip">FREE SHIPPING ON PAID ORDERS ABOVE RS 4,999</div>
+        <nav class="navbar navbar-expand-lg store-navbar">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Store" asp-action="Index">Pakistan Store Pro</a>
+                <a class="navbar-brand brand-logo" asp-controller="Store" asp-action="Index">PAKSTYLE</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="topNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index">Store</a></li>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item"><a class="nav-link" asp-controller="Products" asp-action="Index">Manage Products</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Reviews" asp-action="Index">Manage Reviews</a></li>
-                        }
+                    <ul class="navbar-nav nav-main mx-auto">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index">WOMEN</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Men">MEN</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Kids">KIDS</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">ACCESSORIES</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Store" asp-action="Index">NEW IN</a></li>
                     </ul>
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav nav-actions align-items-lg-center">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item"><span class="nav-link">Hi, @User.Identity.Name (@User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value)</span></li>
-                            <li class="nav-item"><a class="btn btn-outline-light btn-sm mt-1" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                            @if (User.IsInRole("CEO"))
+                            {
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="CEO">CEO Dashboard</a></li>
+                            }
+                            else if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="Admin">Admin Dashboard</a></li>
+                            }
+                            else
+                            {
+                                <li class="nav-item"><a class="nav-link admin-link" asp-controller="Dashboard" asp-action="Employee">Employee Dashboard</a></li>
+                            }
+                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Orders" asp-action="Index">ORDERS</a></li>
+                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Products" asp-action="Index">PRODUCTS</a></li>
+                            <li class="nav-item"><a class="nav-link admin-link" asp-controller="Reviews" asp-action="Index">REVIEWS</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-dark ms-lg-2" asp-controller="Account" asp-action="Logout">Logout</a></li>
                         }
                         else
                         {
-                            <li class="nav-item"><a class="btn btn-warning btn-sm mt-1" asp-controller="Account" asp-action="Login">Admin Login</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-outline-dark ms-lg-2" asp-controller="Account" asp-action="Login">Staff Login</a></li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container-fluid px-0">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Pakistan Store Pro
+    <footer class="footer text-muted">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <strong class="footer-brand">PAKSTYLE</strong>
+                    <p class="mb-2 small">Professional Pakistan fashion ecommerce platform with secure payments and admin controls.</p>
+                    <div class="small">Support: +92 300 0000000</div>
+                    <div class="small">Email: support@pakstyle.pk</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6>Shop</h6>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index">Women</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Men">Men</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Kids">Kids</a>
+                    <a class="footer-link d-block" asp-controller="Store" asp-action="Index" asp-route-category="Accessories">Accessories</a>
+                </div>
+                <div class="col-6 col-md-2">
+                    <h6>Company</h6>
+                    <a class="footer-link d-block external-link" href="https://nishatlinen.com/" target="_blank" rel="noopener noreferrer">Design Reference</a>
+                    <a class="footer-link d-block external-link" href="https://learn.microsoft.com/aspnet/core/security/" target="_blank" rel="noopener noreferrer">Security Docs</a>
+                </div>
+                <div class="col-12 col-md-3">
+                    <h6>Need Help?</h6>
+                    <p class="small mb-2">For returns, exchanges and order support contact our team.</p>
+                    <a class="btn btn-outline-dark btn-sm" asp-controller="Store" asp-action="Index">Continue Shopping</a>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.querySelectorAll("a.external-link").forEach(a => {
+            a.setAttribute("target", "_blank");
+            a.setAttribute("rel", "noopener noreferrer");
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -10,6 +10,7 @@
         <p>Unit Price: <strong>PKR @p.PricePkr</strong></p>
         <p class="text-muted">Bank Transfer (Pakistan): Meezan Bank - 0312-xxxxxxx / IBAN PK00MEEZ0000000000</p>
         <form method="post">
+            @Html.AntiForgeryToken()
             <input asp-for="ProductId" type="hidden" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-2">
@@ -30,9 +31,37 @@
             </div>
             <div class="mb-3">
                 <label asp-for="PaymentMethod" class="form-label"></label>
-                <select asp-for="PaymentMethod" class="form-select" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
+                <select asp-for="PaymentMethod" id="paymentMethod" class="form-select" asp-items="Html.GetEnumSelectList<PaymentMethod>()"></select>
+            </div>
+            <div id="bankTransferFields" class="border rounded p-3 mb-3 bg-light d-none">
+                <h6>Bank Transfer Details</h6>
+                <p class="small mb-2">Send amount to: Meezan Bank - Account 0312-XXXXXXX / IBAN PK00MEEZ0000000000</p>
+                <div class="mb-2">
+                    <label asp-for="BankTransactionId" class="form-label"></label>
+                    <input asp-for="BankTransactionId" class="form-control" placeholder="e.g TXN-12345678" />
+                    <span asp-validation-for="BankTransactionId" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="PaymentScreenshotUrl" class="form-label"></label>
+                    <input asp-for="PaymentScreenshotUrl" class="form-control" placeholder="Paste screenshot URL or drive link" />
+                    <span asp-validation-for="PaymentScreenshotUrl" class="text-danger"></span>
+                </div>
             </div>
             <button class="btn btn-primary">Place Order</button>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const paymentMethod = document.getElementById("paymentMethod");
+        const bankTransferFields = document.getElementById("bankTransferFields");
+        const toggleBankFields = () => {
+            const isBankTransfer = paymentMethod.value === "BankTransfer" || paymentMethod.value === "2";
+            bankTransferFields.classList.toggle("d-none", !isBankTransfer);
+        };
+        paymentMethod.addEventListener("change", toggleBankFields);
+        toggleBankFields();
+    </script>
+}

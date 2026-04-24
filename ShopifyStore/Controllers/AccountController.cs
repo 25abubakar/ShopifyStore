@@ -37,7 +37,12 @@ public class AccountController(AppDbContext db) : Controller
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-        return RedirectToAction("Index", "Store");
+        return user.Role switch
+        {
+            UserRole.CEO => RedirectToAction("CEO", "Dashboard"),
+            UserRole.Admin => RedirectToAction("Admin", "Dashboard"),
+            _ => RedirectToAction("Employee", "Dashboard")
+        };
     }
 
     public async Task<IActionResult> Logout()
