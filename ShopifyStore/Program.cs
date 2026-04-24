@@ -36,7 +36,13 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    var canConnect = db.Database.CanConnect();
+    var migrationsHistoryExists = canConnect && DbSchemaUpdater.HasMigrationsHistoryTable(db);
+    if (!canConnect || migrationsHistoryExists)
+    {
+        db.Database.Migrate();
+    }
+
     DbSchemaUpdater.EnsureCompatibilityColumns(db);
     SeedData.EnsureSeeded(db);
 }
