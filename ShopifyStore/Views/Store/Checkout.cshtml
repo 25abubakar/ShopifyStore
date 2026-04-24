@@ -4,8 +4,10 @@
     var p = (Product)ViewBag.Product;
 }
 
-<div class="row">
-    <div class="col-md-6">
+<div class="content-container py-4">
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-7">
+        <div class="form-card">
         <h3>Checkout - @p.Name</h3>
         <p>Unit Price: <strong>PKR @p.PricePkr</strong></p>
         <p class="text-muted">Bank Transfer (Pakistan): Meezan Bank - 0312-xxxxxxx / IBAN PK00MEEZ0000000000</p>
@@ -49,7 +51,9 @@
             </div>
             <button class="btn btn-primary">Place Order</button>
         </form>
+        </div>
     </div>
+</div>
 </div>
 
 @section Scripts {

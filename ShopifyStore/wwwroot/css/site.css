@@ -146,6 +146,12 @@ body {
   object-fit: cover;
 }
 
+.product-detail-image {
+  width: 100%;
+  max-height: 540px;
+  object-fit: cover;
+}
+
 .product-body {
   padding: 12px;
 }
@@ -219,6 +225,16 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
 
+.table-responsive {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.table-responsive .table {
+  margin-bottom: 0;
+}
+
 @media (max-width: 991px) {
   .nav-main .nav-link {
     margin: 2px 0;
@@ -238,6 +254,10 @@ body {
     height: 240px;
   }
 
+  .hero-actions .hero-btn {
+    width: 100%;
+  }
+
   .footer {
     font-size: 13px;
   }
@@ -255,5 +275,25 @@ body {
 
   .form-card {
     padding: 14px;
+  }
+
+  .content-container {
+    padding: 14px 10px;
+  }
+
+  .hero-overlay {
+    margin-left: 4%;
+  }
+
+  .product-img {
+    height: 190px;
+  }
+
+  .product-name {
+    font-size: 14px;
+  }
+
+  .product-price {
+    font-size: 16px;
   }
 }
