@@ -1,0 +1,12 @@
+@model Review
+@{
+    ViewData["Title"] = "Delete Review";
+}
+<div class="alert alert-warning">
+    <h4>Delete Review</h4>
+    <p>Delete review by <strong>@Model.CustomerName</strong> on <strong>@Model.Product?.Name</strong>?</p>
+</div>
+<form method="post">
+    <button class="btn btn-danger">Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
