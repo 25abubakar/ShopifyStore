@@ -26,9 +26,38 @@ public class OrdersController(AppDbContext db) : Controller
         var order = await db.Orders.FindAsync(id);
         if (order is null) return NotFound();
 
+        if (!IsValidStatusTransition(orderStatus, paymentStatus))
+        {
+            TempData["OrderStatusError"] = "Invalid status combination selected.";
+            return RedirectToAction(nameof(Index));
+        }
+
         order.OrderStatus = orderStatus;
         order.PaymentStatus = paymentStatus;
         await db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private static bool IsValidStatusTransition(OrderStatus orderStatus, PaymentStatus paymentStatus)
+    {
+        if (orderStatus == OrderStatus.PaymentUnderReview
+            && paymentStatus is not (PaymentStatus.VerificationPending or PaymentStatus.GatewayPending))
+        {
+            return false;
+        }
+
+        if (orderStatus == OrderStatus.Delivered
+            && paymentStatus is not (PaymentStatus.Paid or PaymentStatus.Unpaid))
+        {
+            return false;
+        }
+
+        if (orderStatus == OrderStatus.Cancelled
+            && paymentStatus == PaymentStatus.Paid)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

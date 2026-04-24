@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<ProductTaxonomyEntry> ProductTaxonomyEntries => Set<ProductTaxonomyEntry>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,5 +23,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Product>()
             .Property(x => x.Subcategory)
             .HasMaxLength(120);
+
+        modelBuilder.Entity<ProductTaxonomyEntry>()
+            .HasIndex(x => new { x.Department, x.Category, x.Subcategory })
+            .IsUnique();
     }
 }

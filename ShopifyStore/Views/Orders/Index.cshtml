@@ -5,6 +5,10 @@
 
 <div class="container py-4">
     <h3>Orders & Payments</h3>
+    @if (TempData["OrderStatusError"] is string errorMessage)
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
     <div class="table-responsive">
     <table class="table table-bordered table-striped">
         <thead>
@@ -27,7 +31,14 @@
                 <td>@o.CustomerName<br /><small>@o.Phone</small></td>
                 <td>Rs. @o.TotalAmountPkr</td>
                 <td>@o.PaymentMethod</td>
-                <td>@(string.IsNullOrWhiteSpace(o.BankTransactionId) ? "-" : o.BankTransactionId)</td>
+                <td>
+                    @(string.IsNullOrWhiteSpace(o.PaymentReference) ? o.BankTransactionId : o.PaymentReference)
+                    @if (!string.IsNullOrWhiteSpace(o.PaymentScreenshotUrl))
+                    {
+                        <br />
+                        <a href="@o.PaymentScreenshotUrl" target="_blank" rel="noopener noreferrer">Proof</a>
+                    }
+                </td>
                 <td>@o.PaymentStatus</td>
                 <td>@o.OrderStatus</td>
                 <td>
@@ -36,8 +47,18 @@
                         <form asp-action="UpdateStatus" method="post" class="d-flex gap-1">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@o.Id" />
-                            <select name="orderStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<OrderStatus>()"></select>
-                            <select name="paymentStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<PaymentStatus>()"></select>
+                            <select name="orderStatus" class="form-select form-select-sm">
+                                @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                                {
+                                    <option value="@((int)status)" selected="@(o.OrderStatus == status)">@status</option>
+                                }
+                            </select>
+                            <select name="paymentStatus" class="form-select form-select-sm">
+                                @foreach (PaymentStatus status in Enum.GetValues(typeof(PaymentStatus)))
+                                {
+                                    <option value="@((int)status)" selected="@(o.PaymentStatus == status)">@status</option>
+                                }
+                            </select>
                             <button class="btn btn-sm btn-dark">Save</button>
                         </form>
                     }

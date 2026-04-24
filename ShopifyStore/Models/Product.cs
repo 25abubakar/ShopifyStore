@@ -4,8 +4,6 @@ namespace ShopifyStore.Models;
 
 public class Product
 {
-    public static readonly string[] Departments = ["Men", "Women", "Kids", "Accessories"];
-
     public int Id { get; set; }
 
     [Required, StringLength(150)]

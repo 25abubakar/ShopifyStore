@@ -36,6 +36,53 @@ public static class DbSchemaUpdater
                 """);
         }
 
+        db.Database.ExecuteSqlRaw(
+            """
+            IF OBJECT_ID('dbo.ProductTaxonomyEntries', 'U') IS NULL
+            BEGIN
+                CREATE TABLE dbo.ProductTaxonomyEntries
+                (
+                    Id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    Department nvarchar(80) NOT NULL,
+                    Category nvarchar(120) NOT NULL,
+                    Subcategory nvarchar(120) NOT NULL
+                );
+            END
+            """);
+
+        db.Database.ExecuteSqlRaw(
+            """
+            IF NOT EXISTS (
+                SELECT 1
+                FROM sys.indexes
+                WHERE name = 'IX_ProductTaxonomyEntries_Department_Category_Subcategory'
+                  AND object_id = OBJECT_ID('dbo.ProductTaxonomyEntries')
+            )
+            BEGIN
+                CREATE UNIQUE INDEX IX_ProductTaxonomyEntries_Department_Category_Subcategory
+                ON dbo.ProductTaxonomyEntries(Department, Category, Subcategory);
+            END
+            """);
+
+        if (TableExists(db, "Products"))
+        {
+            db.Database.ExecuteSqlRaw(
+                """
+                INSERT INTO dbo.ProductTaxonomyEntries(Department, Category, Subcategory)
+                SELECT DISTINCT p.Department, p.Category, p.Subcategory
+                FROM dbo.Products p
+                WHERE LTRIM(RTRIM(p.Department)) <> ''
+                  AND LTRIM(RTRIM(p.Category)) <> ''
+                  AND LTRIM(RTRIM(p.Subcategory)) <> ''
+                  AND NOT EXISTS (
+                      SELECT 1 FROM dbo.ProductTaxonomyEntries t
+                      WHERE t.Department = p.Department
+                        AND t.Category = p.Category
+                        AND t.Subcategory = p.Subcategory
+                  );
+                """);
+        }
+
         if (!TableExists(db, "Orders"))
         {
             return;

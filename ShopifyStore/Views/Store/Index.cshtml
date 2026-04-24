@@ -70,7 +70,14 @@
         </div>
         <div class="col-12">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="inStockOnly" value="true" checked="@Model.InStockOnly" id="inStockOnly" />
+                @if (Model.InStockOnly)
+                {
+                    <input class="form-check-input" type="checkbox" name="inStockOnly" value="true" checked id="inStockOnly" />
+                }
+                else
+                {
+                    <input class="form-check-input" type="checkbox" name="inStockOnly" value="true" id="inStockOnly" />
+                }
                 <label class="form-check-label" for="inStockOnly">In stock only</label>
             </div>
         </div>
