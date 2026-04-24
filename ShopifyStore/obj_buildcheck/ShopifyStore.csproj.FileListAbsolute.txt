@@ -148,7 +148,6 @@ C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\rjsm
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\scopedcss\bundle\ShopifyStore.styles.css
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\scopedcss\projectbundle\ShopifyStore.bundle.scp.css
-C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\compressed\4tkyhthjkp-{0}-95ai9sqgh4-95ai9sqgh4.gz
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\compressed\j17rmjz766-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\compressed\jwviouniiq-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\compressed\y8g57z033z-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -223,3 +222,4 @@ C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\refi
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\ShopifyStore.pdb
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\ShopifyStore.genruntimeconfig.cache
 C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\ref\ShopifyStore.dll
+C:\Users\abubakar_291\source\repos\ShopifyStore\ShopifyStore\obj_buildcheck\compressed\4tkyhthjkp-{0}-ubyqy1o13m-ubyqy1o13m.gz

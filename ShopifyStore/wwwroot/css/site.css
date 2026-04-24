@@ -6,6 +6,7 @@
 
 html {
   font-size: 16px;
+  height: 100%;
 }
 
 body {
@@ -13,6 +14,9 @@ body {
   color: #1f1f1f;
   background: #fff;
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .site-header {
@@ -186,8 +190,9 @@ body {
 .footer {
   background: #faf8f4;
   border-top: 1px solid #e2ddd0;
-  margin-top: 16px;
+  margin-top: 0;
   font-size: 14px;
+  flex-shrink: 0;
 }
 
 .footer-brand {
@@ -206,7 +211,7 @@ body {
 }
 
 .page-content {
-  min-height: calc(100vh - 185px);
+  flex: 1 0 auto;
 }
 
 .content-container {
