@@ -1,0 +1,13 @@
+@model Order
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="alert alert-success">
+    <h3>Order Placed Successfully</h3>
+    <p>Order ID: <strong>#@Model.Id</strong></p>
+    <p>Total: <strong>PKR @Model.TotalAmountPkr</strong></p>
+    <p>Payment: <strong>@Model.PaymentMethod</strong></p>
+    <p>Thank you, @Model.CustomerName. Our team will contact you on @Model.Phone.</p>
+</div>
+<a class="btn btn-dark" asp-action="Index">Continue Shopping</a>
